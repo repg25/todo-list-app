@@ -1,0 +1,88 @@
+<div class="container">
+  <h1>📝 To-Do List</h1>
+  
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" class="error-message">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Formulario para agregar tareas -->
+  <div class="task-form">
+    <h2>Nueva Tarea</h2>
+    <input 
+      type="text" 
+      [(ngModel)]="newTask.titulo" 
+      placeholder="Título de la tarea"
+      class="input-field"
+      (keyup.enter)="addTask()"
+    >
+    <textarea 
+      [(ngModel)]="newTask.descripcion" 
+      placeholder="Descripción (opcional)"
+      class="input-field"
+    ></textarea>
+    <button (click)="addTask()" class="btn btn-primary">
+      ➕ Agregar Tarea
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    Cargando tareas...
+  </div>
+
+  <!-- Lista de tareas -->
+  <div class="tasks-container">
+    <h2>Tareas</h2>
+    
+    <div *ngIf="!isLoading && tasks.length === 0" class="no-tasks">
+      No hay tareas. ¡Crea una nueva!
+    </div>
+
+    <div *ngFor="let task of tasks" class="task-card" [class.completed]="task.is_completed">
+      <div class="task-header">
+        <h3>{{ task.titulo }}</h3>
+        <span class="status-badge" [class.completed]="task.is_completed">
+          {{ task.is_completed ? '✅ Completada' : '⏳ Pendiente' }}
+        </span>
+      </div>
+
+      <p *ngIf="task.descripcion" class="task-description">
+        {{ task.descripcion }}
+      </p>
+
+      <div class="task-info">
+        <div class="info-item">
+          <strong>Creada:</strong> 
+          {{ task.created_at | date:'dd/MM/yyyy HH:mm' }}
+        </div>
+
+        <div *ngIf="task.is_completed" class="info-item">
+          <strong>Completada:</strong> 
+          {{ task.completed_at | date:'dd/MM/yyyy HH:mm' }}
+        </div>
+
+        <div *ngIf="task.duracion_minutos" class="info-item">
+          <strong>Duración:</strong> 
+          {{ formatDuration(task.duracion_minutos) }}
+        </div>
+      </div>
+
+      <div class="task-actions">
+        <button 
+          *ngIf="!task.is_completed" 
+          (click)="completeTask(task.id)" 
+          class="btn btn-success"
+        >
+          ✓ Completar
+        </button>
+        <button 
+          (click)="deleteTask(task.id)" 
+          class="btn btn-danger"
+        >
+          🗑️ Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

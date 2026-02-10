@@ -33,7 +33,7 @@ exports.createTask = async (req, res) => {
     //Validar titulo y descripcion sean string validos
     const pool = await getConnection();
     const result = await pool.request()
-        .input('titulo', sql.NVarChar, titutlo.trim())
+        .input('titulo', sql.NVarChar, titulo.trim())
         .input('descripcion', sql.NVarChar, descripcion ? descripcion.trim() : '')
         .query(`
             INSERT INTO tasks (titulo, descripcion)
@@ -77,7 +77,7 @@ exports.completeTask = async (req, res) => {
         }
 
         //Calcular la duracion en minutos desde crearla hasta completarla
-        const createdAt = new Date(taskResult.recordset[0].createdAt_at);
+        const createdAt = new Date(taskResult.recordset[0].created_at);
         const completedAt = new Date();
         const duracion_minutos = Math.round((completedAt - createdAt) / (1000 * 60));
 
@@ -132,7 +132,7 @@ exports.deleteTask = async (req, res) => {
             message: 'Tarea eliminada exitosamente',
             id: parseInt(id)
         });   
-    } catch (errro) {
+    } catch (error) {
         console.error('Error al eliminar tarea:', error);
         res.status(500).json({
             error: 'Error al eliminar tarea',
