@@ -60,7 +60,7 @@ exports.completeTask = async (req, res) => {
         const pool = await getConnection();
         const taskResult = await pool.request()
             .input('id', sql.Int, id)
-            .query('SELECT created_at, is_completed FROM tasks WHERE id = @id');
+            .query('SELECT id, is_completed FROM tasks WHERE id = @id');
         
         //Validar que la tarea exista y no este completada antes de marcarla como completada
         if (taskResult.recordset.length === 0) {
@@ -84,16 +84,15 @@ exports.completeTask = async (req, res) => {
         //Actualizar la tarea como completada y calcular la duracion en minutos
         const result = await pool.request()
             .input('id', sql.Int, id)
-                .input('completed_at', sql.DateTime2, completedAt)
-                .input('duracion_minutos', sql.Int, duracion_minutos)
-                .query(`
-                    UPDATE tasks
-                    SET is_completed = 1,
-                        completed_at = @completed_at,
-                        duracion_minutos = @duracion_minutos
-                    OUTPUT INSERTED.*
-                    WHERE id = @id
-                    `);
+            .query(`
+                UPDATE tasks
+                SET is_completed = 1,
+                    completed_at = GETDATE(),
+                    duracion_minutos = DATEDIFF(MINUTE, created_at, GETDATE())
+                OUTPUT INSERTED.*
+                WHERE id = @id
+           `);
+           
         res.json(result.recordset[0]);
 
     } catch (error) {

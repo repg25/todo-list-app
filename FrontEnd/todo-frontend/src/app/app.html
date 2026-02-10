@@ -12,6 +12,7 @@
     <input 
       type="text" 
       [(ngModel)]="newTask.titulo" 
+      (input)="errorMessage = null"
       placeholder="Título de la tarea"
       class="input-field"
       (keyup.enter)="addTask()"
@@ -54,12 +55,12 @@
       <div class="task-info">
         <div class="info-item">
           <strong>Creada:</strong> 
-          {{ task.created_at | date:'dd/MM/yyyy HH:mm' }}
+          {{ task.created_at | date:'dd/MM/yyyy HH:mm':'UTC' }}
         </div>
 
         <div *ngIf="task.is_completed" class="info-item">
           <strong>Completada:</strong> 
-          {{ task.completed_at | date:'dd/MM/yyyy HH:mm' }}
+          {{ task.completed_at | date:'dd/MM/yyyy HH:mm':'UTC' }}
         </div>
 
         <div *ngIf="task.duracion_minutos" class="info-item">

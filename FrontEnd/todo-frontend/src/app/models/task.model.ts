@@ -5,5 +5,5 @@
     created_at?: Date;
     completed_at?: Date;
     duracion_minutos?: number;
-    is_completed: false;
+    is_completed: boolean;
  }
