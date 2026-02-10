@@ -12,7 +12,7 @@
     <input 
       type="text" 
       [(ngModel)]="newTask.titulo" 
-      (input)="errorMessage = null"
+      (input)="errorMessage = ''"
       placeholder="Título de la tarea"
       class="input-field"
       (keyup.enter)="addTask()"
@@ -48,6 +48,7 @@
         </span>
       </div>
 
+      <!-- Mostrar descripción de la tarea -->
       <p *ngIf="task.descripcion" class="task-description">
         {{ task.descripcion }}
       </p>

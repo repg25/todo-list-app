@@ -44,7 +44,10 @@ export class AppComponent implements OnInit {
 
   //Funcion para agregar una nueva tarea, con validacion de titulo no vacio
   addTask() {
-    if (this.newTask.titulo.trim()) {
+    if (this.newTask.titulo.trim() === '') {
+      this.errorMessage = 'El título de la tarea no puede estar vacío.';
+      return;
+    }
       this.taskService.createTask(this.newTask).subscribe({
         next: () => {
           this.loadTasks();
@@ -57,7 +60,6 @@ export class AppComponent implements OnInit {
         }
       });
     }
-  }
 
   //Funcion para marcar una tarea como completada
   completeTask(id: number | undefined) {
