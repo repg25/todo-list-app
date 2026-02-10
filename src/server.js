@@ -4,7 +4,7 @@ require('dotenv').config();
 
 // Importar rutas y controladores
 const taskRoutes = require('./routes/tasksRoutes');
-const { getAllTasks, createTask, completeTask, deleteTask } = require('./src/controllers/tasksControllers');
+const { getAllTasks, createTask, completeTask, deleteTask } = require('./controllers/tasksControllers');
 
 const app = express();
 

@@ -4,12 +4,14 @@ require('dotenv').config();
 
 //Configuracion de la conexion a la base de datos
 const config = {
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
     server: process.env.DB_SERVER,
-    database: process.env.DB_NAME,
+    database: process.env.DB_DATABASE,
+    port: parseInt(process.env.DB_PORT),
     options: {
         encrypt: false,
         trustServerCertificate: true,
-        trustedConnection: true,
         enableArithAbort: true
     },
     pool: {
@@ -26,6 +28,7 @@ const getConnection = async () => {
         poolPromise = sql.connect(config)
             .then(pool => {
                 console.log('Conectado a Base de datos - SQL Server: ', process.env.DB_DATABASE);
+                return pool;
             })
             .catch(err => {
                 console.log('Error de conexion a SQL Server:', err);
@@ -36,6 +39,4 @@ const getConnection = async () => {
     return poolPromise;
 };
 
-module.exports = {
-    sql, getConnection
-};
+module.exports = {sql, getConnection};
